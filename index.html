@@ -2,6 +2,39 @@
 <html>
 <head>
   <title>구성학 결과</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    h1, h2, p {
+      color: #fff;
+    }
+
+    #calculateForm, #resultContainer {
+      display: inline-block;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #0f0;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    #calculateForm label, #resultText {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #resultContainer {
+      display: none;
+    }
+  </style>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -12,19 +45,28 @@
     <label for="birthYear">생년:</label>
     <select id="birthYear" name="birthYear" required>
       <option value="">선택</option>
-      <option value="1970">1970년</option>
-      <!-- 다른 년도 옵션 추가 -->
+      <!-- 생년도 옵션 생성 -->
+      <script>
+        var currentYear = new Date().getFullYear();
+        for (var year = 1950; year <= 2030; year++) {
+          document.write('<option value="' + year + '">' + year + '년</option>');
+        }
+      </script>
     </select><br><br>
     <label for="birthMonth">월:</label>
     <select id="birthMonth" name="birthMonth" required>
       <option value="">선택</option>
-      <option value="1">1월</option>
-      <!-- 다른 월 옵션 추가 -->
+      <!-- 월 옵션 생성 -->
+      <script>
+        for (var month = 1; month <= 12; month++) {
+          document.write('<option value="' + month + '">' + month + '월</option>');
+        }
+      </script>
     </select><br><br>
     <input type="submit" value="계산">
   </form>
 
-  <div id="resultContainer" style="display: none;">
+  <div id="resultContainer">
     <h2>결과</h2>
     <p id="resultText"></p>
   </div>
