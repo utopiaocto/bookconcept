@@ -64,7 +64,7 @@
             <script>
                 const monthSelect = document.getElementById("month");
                 const months = [
-                    "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해", "자"
+                    "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해", "자", "축"
                 ];
                 for (let month = 1; month <= 12; month++) {
                     const option = document.createElement("option");
@@ -89,22 +89,21 @@
                 return;
             }
 
-            function calculateBirthStar(year) {
-                const yearSum = Array.from(String(year), Number).reduce((a, b) => a + b);
-                const yearSumDigits = Array.from(String(yearSum), Number).reduce((a, b) => a + b);
-                const starNumber = 11 - yearSumDigits;
-                return starNumber === 11 ? 1 : starNumber;
+            // 본명성 구하기
+            let birthYear = year;
+            while (birthYear > 9) {
+                birthYear = Array.from(String(birthYear), Number).reduce((a, b) => a + b);
             }
+            const birthStar = 11 - birthYear;
 
-            function calculateMonthStar(month) {
-                const monthStars = [
-                    8, 7, 5, 3, 2, 4, 6, 7, 9, 10, 11, 9
-                ];
-                return monthStars[month - 1];
-            }
-
-            const birthStar = calculateBirthStar(year);
-            const monthStar = calculateMonthStar(month);
+            // 월명성 구하기
+            const zodiacSigns = [
+                [9, 6, 3, 9], // 자오묘유년
+                [3, 9, 6, 3], // 인신사해년
+                [6, 3, 9, 6]  // 진술축미년
+            ];
+            const zodiacIndex = (year - 4) % 12;
+            const monthStar = zodiacSigns[zodiacIndex][month - 1];
 
             const resultBox = document.createElement("div");
             resultBox.classList.add("result-box");
