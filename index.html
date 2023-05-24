@@ -1,164 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구성학 결과</title>
+    <title>월명성 구하기</title>
     <style>
         body {
             background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .box {
-            max-width: 600px;
-            background-color: #0f0;
-            padding: 20px;
+            color: #fff;
             text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .input-container {
-            display: flex;
-            gap: 10px;
+        .result-box {
+            background-color: #0f610f;
+            padding: 10px;
             margin-bottom: 20px;
         }
 
-        input {
+        select {
+            width: 100%;
             padding: 10px;
+            margin-bottom: 10px;
         }
 
         button {
             padding: 10px 20px;
+            background-color: #0f610f;
+            color: #fff;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>구성학 결과</h2>
-        <div class="input-container">
-            <input type="text" id="name-input" placeholder="이름">
-            <select id="year-input">
-                <option value="">생년</option>
-                <script>
-                    for (let year = 1950; year <= 2030; year++) {
-                        document.write(`<option value="${year}">${year}년</option>`);
-                    }
-                </script>
-            </select>
-            <select id="month-input">
-                <option value="">월</option>
-                <script>
-                    for (let month = 1; month <= 12; month++) {
-                        document.write(`<option value="${month}">${month}월</option>`);
-                    }
-                </script>
-            </select>
-        </div>
-        <button onclick="calculate()">결과 보기</button>
-        <div id="result"></div>
+    <h1>월명성 구하기</h1>
+    <div>
+        <label for="name">성함:</label>
+        <input type="text" id="name">
     </div>
+    <div>
+        <label for="year">생년:</label>
+        <select id="year">
+            <option value="1950">1950년</option>
+            <option value="1951">1951년</option>
+            <!-- 중간 생략 -->
+            <option value="2029">2029년</option>
+            <option value="2030">2030년</option>
+        </select>
+    </div>
+    <div>
+        <label for="month">생월:</label>
+        <select id="month">
+            <option value="1">1월</option>
+            <option value="2">2월</option>
+            <!-- 중간 생략 -->
+            <option value="11">11월</option>
+            <option value="12">12월</option>
+        </select>
+    </div>
+    <button onclick="calculate()">결과 보기</button>
+    <div id="result"></div>
 
     <script>
         function calculate() {
-            const name = document.getElementById('name-input').value;
-            const year = document.getElementById('year-input').value;
-            const month = document.getElementById('month-input').value;
-
-            if (!name || !year || !month) {
-                alert("이름, 생년, 월을 모두 입력해주세요.");
-                return;
+            const name = document.getElementById("name").value;
+            const year = parseInt(document.getElementById("year").value);
+            const month = parseInt(document.getElementById("month").value);
+            
+            let monthMingxing;
+            if (year % 2 === 0) {
+                if (["子", "午", "卯", "酉"].includes(year % 12)) {
+                    monthMingxing = 8;
+                } else if (["辰", "戌", "丑", "未"].includes(year % 12)) {
+                    monthMingxing = 5;
+                } else if (["寅", "申", "巳", "亥"].includes(year % 12)) {
+                    monthMingxing = 2;
+                }
+            } else {
+                if (["子", "午", "卯", "酉"].includes(year % 12)) {
+                    monthMingxing = 7;
+                } else if (["辰", "戌", "丑", "未"].includes(year % 12)) {
+                    monthMingxing = 9;
+                } else if (["寅", "申", "巳", "亥"].includes(year % 12)) {
+                    monthMingxing = 6;
+                }
             }
-
-            const birthYear = parseInt(year);
-            const birthMonth = parseInt(month);
-
-            // 본명성 계산
-            let sum = 0;
-            for (let i = 0; i < year.length; i++) {
-                sum += parseInt(year.charAt(i));
-            }
-            let coreNumber = sum % 9;
-            if (coreNumber === 0) {
-                coreNumber = 9;
-            }
-
-            let 본명성 = "";
-            switch (coreNumber) {
-                case 1:
-                    본명성 = "1백수성";
-                    break;
-                case 2:
-                    본명성 = "2흑토성";
-                    break;
-                case 3:
-                    본명성 = "3벽목성";
-                    break;
-                case 4:
-                    본명성 = "4록목성";
-                    break;
-                case 5:
-                    본명성 = "5황토성";
-                    break;
-                case 6:
-                    본명성 = "6백금성";
-                    break;
-                case 7:
-                    본명성 = "7적금성";
-                    break;
-                case 8:
-                    본명성 = "8백토성";
-                    break;
-                case 9:
-                    본명성 = "9자화성";
-                    break;
-            }
-
-            // 월명성 계산
-            let 월명성 = "";
-            switch (birthMonth) {
-                case 1:
-                    월명성 = "1백수성";
-                    break;
-                case 2:
-                    월명성 = "2흑토성";
-                    break;
-                case 3:
-                    월명성 = "3벽목성";
-                    break;
-                case 4:
-                    월명성 = "4록목성";
-                    break;
-                case 5:
-                    월명성 = "5황토성";
-                    break;
-                case 6:
-                    월명성 = "6백금성";
-                    break;
-                case 7:
-                    월명성 = "7적금성";
-                    break;
-                case 8:
-                    월명성 = "8백토성";
-                    break;
-                case 9:
-                    월명성 = "9자화성";
-                    break;
-                case 10:
-                    월명성 = "1백수성";
-                    break;
-                case 11:
-                    월명성 = "2흑토성";
-                    break;
-                case 12:
-                    월명성 = "3벽목성";
-                    break;
-            }
-
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = `<p>${name}의 본명성은 ${본명성}이고, 월명성은 ${월명성}입니다.</p>`;
+            
+            const resultBox = document.createElement("div");
+            resultBox.classList.add("result-box");
+            resultBox.innerHTML = `<p>${name}의 본명성은 ${year}년의 본명성은 ${monthMingxing}입니다.</p>`;
+            
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("result").appendChild(resultBox);
         }
     </script>
 </body>
