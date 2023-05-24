@@ -64,7 +64,7 @@
             <script>
                 const monthSelect = document.getElementById("month");
                 const months = [
-                    "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해", "자", "축"
+                    "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해", "자"
                 ];
                 for (let month = 1; month <= 12; month++) {
                     const option = document.createElement("option");
@@ -89,24 +89,26 @@
                 return;
             }
 
-            let birthStar;
-            let monthStar;
+            function calculateBirthStar(year) {
+                const yearSum = Array.from(String(year), Number).reduce((a, b) => a + b);
+                const yearSumDigits = Array.from(String(yearSum), Number).reduce((a, b) => a + b);
+                const starNumber = 11 - yearSumDigits;
+                return starNumber === 11 ? 1 : starNumber;
+            }
 
-            // 본명성 구하기
-            const yearSum = Array.from(String(year), Number).reduce((a, b) => a + b);
-            const yearSumDigits = Array.from(String(yearSum), Number).reduce((a, b) => a + b);
-            const starNumber = 11 - yearSumDigits;
-            birthStar = starNumber === 11 ? 1 : starNumber;
+            function calculateMonthStar(month) {
+                const monthStars = [
+                    8, 7, 5, 3, 2, 4, 6, 7, 9, 10, 11, 9
+                ];
+                return monthStars[month - 1];
+            }
 
-            // 월명성 구하기
-            const monthStars = [
-                8, 7, 5, 3, 2, 4, 6, 7, 9, 10, 11, 9
-            ];
-            monthStar = monthStars[month - 1];
+            const birthStar = calculateBirthStar(year);
+            const monthStar = calculateMonthStar(month);
 
             const resultBox = document.createElement("div");
             resultBox.classList.add("result-box");
-            resultBox.innerHTML = `<p>${year}년 ${months[month - 1]}월은 ${monthStar}이 월명성입니다.</p>`;
+            resultBox.innerHTML = `<p>${year}년 ${month}월은 본명성이 ${birthStar}, 월명성이 ${monthStar}</p>`;
 
             document.getElementById("result").innerHTML = "";
             document.getElementById("result").appendChild(resultBox);
