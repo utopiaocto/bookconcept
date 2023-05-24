@@ -1,98 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>구성학 결과</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구성학 결과</title>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    h1, h2, p {
-      color: #fff;
-    }
+        .box {
+            max-width: 600px;
+            background-color: #0f0;
+            padding: 20px;
+            text-align: center;
+        }
 
-    #calculateForm, #resultContainer {
-      display: inline-block;
-      margin: 0 auto;
-      padding: 40px;
-      background-color: #006400;
-      color: #fff;
-      border-radius: 10px;
-    }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-    #calculateForm label, #resultText {
-      display: block;
-      margin-bottom: 20px;
-    }
+        input {
+            padding: 10px;
+        }
 
-    #resultContainer {
-      display: none;
-    }
-  </style>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        button {
+            padding: 10px 20px;
+        }
+    </style>
 </head>
 <body>
-  <h1>구성학 결과 계산기</h1>
-  <form id="calculateForm">
-    <label for="seong">성함:</label>
-    <input type="text" id="seong" name="seong" required><br><br>
-    <label for="birthYear">생년:</label>
-    <select id="birthYear" name="birthYear" required>
-      <option value="">선택</option>
-      <!-- 생년도 옵션 생성 -->
-      <script>
-        var currentYear = new Date().getFullYear();
-        for (var year = 1950; year <= 2030; year++) {
-          document.write('<option value="' + year + '">' + year + '년</option>');
+    <div class="box">
+        <h2>구성학 결과</h2>
+        <div class="input-container">
+            <input type="text" id="name-input" placeholder="이름">
+            <select id="year-input">
+                <option value="">생년</option>
+                <script>
+                    for (let year = 1950; year <= 2030; year++) {
+                        document.write(`<option value="${year}">${year}년</option>`);
+                    }
+                </script>
+            </select>
+            <select id="month-input">
+                <option value="">월</option>
+                <script>
+                    for (let month = 1; month <= 12; month++) {
+                        document.write(`<option value="${month}">${month}월</option>`);
+                    }
+                </script>
+            </select>
+        </div>
+        <button onclick="calculate()">결과 보기</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const name = document.getElementById('name-input').value;
+            const year = document.getElementById('year-input').value;
+            const month = document.getElementById('month-input').value;
+
+            if (!name || !year || !month) {
+                alert("이름, 생년, 월을 모두 입력해주세요.");
+                return;
+            }
+
+            const birthYear = parseInt(year);
+            const birthMonth = parseInt(month);
+
+            // 본명성 계산
+            let sum = 0;
+            for (let i = 0; i < year.length; i++) {
+                sum += parseInt(year.charAt(i));
+            }
+            let coreNumber = sum % 9;
+            if (coreNumber === 0) {
+                coreNumber = 9;
+            }
+
+            let 본명성 = "";
+            switch (coreNumber) {
+                case 1:
+                    본명성 = "1백수성";
+                    break;
+                case 2:
+                    본명성 = "2흑토성";
+                    break;
+                case 3:
+                    본명성 = "3벽목성";
+                    break;
+                case 4:
+                    본명성 = "4록목성";
+                    break;
+                case 5:
+                    본명성 = "5황토성";
+                    break;
+                case 6:
+                    본명성 = "6백금성";
+                    break;
+                case 7:
+                    본명성 = "7적금성";
+                    break;
+                case 8:
+                    본명성 = "8백토성";
+                    break;
+                case 9:
+                    본명성 = "9자화성";
+                    break;
+            }
+
+            // 월명성 계산
+            let 월명성 = "";
+            switch (birthMonth) {
+                case 1:
+                    월명성 = "1백수성";
+                    break;
+                case 2:
+                    월명성 = "2흑토성";
+                    break;
+                case 3:
+                    월명성 = "3벽목성";
+                    break;
+                case 4:
+                    월명성 = "4록목성";
+                    break;
+                case 5:
+                    월명성 = "5황토성";
+                    break;
+                case 6:
+                    월명성 = "6백금성";
+                    break;
+                case 7:
+                    월명성 = "7적금성";
+                    break;
+                case 8:
+                    월명성 = "8백토성";
+                    break;
+                case 9:
+                    월명성 = "9자화성";
+                    break;
+                case 10:
+                    월명성 = "1백수성";
+                    break;
+                case 11:
+                    월명성 = "2흑토성";
+                    break;
+                case 12:
+                    월명성 = "3벽목성";
+                    break;
+            }
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `<p>${name}의 본명성은 ${본명성}이고, 월명성은 ${월명성}입니다.</p>`;
         }
-      </script>
-    </select><br><br>
-    <label for="birthMonth">월:</label>
-    <select id="birthMonth" name="birthMonth" required>
-      <option value="">선택</option>
-      <!-- 월 옵션 생성 -->
-      <script>
-        for (var month = 1; month <= 12; month++) {
-          document.write('<option value="' + month + '">' + month + '월</option>');
-        }
-      </script>
-    </select><br><br>
-    <input type="submit" value="계산">
-  </form>
-
-  <div id="resultContainer">
-    <h2>결과</h2>
-    <p id="resultText"></p>
-  </div>
-
-  <script>
-    $(document).ready(function() {
-      $('#calculateForm').submit(function(e) {
-        e.preventDefault();
-
-        var seong = $('#seong').val();
-        var birthYear = parseInt($('#birthYear').val());
-        var birthMonth = parseInt($('#birthMonth').val());
-
-        // 본명성 계산
-        var ming = (birthYear % 100).toString();
-        ming = ming.split('').map(Number).reduce((a, b) => a + b, 0);
-        ming = 11 - (ming % 10);
-
-        // 월명성 계산
-        var wol = birthMonth.toString();
-
-        // 결과 출력
-        $('#resultText').text(seong + '님의 본명성은 ' + ming + '성, 월명성은 ' + wol + '성 입니다.');
-        $('#resultContainer').show();
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
