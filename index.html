@@ -1,25 +1,56 @@
-from flask import Flask, request, render_template
+<!DOCTYPE html>
+<html>
+<head>
+  <title>구성학 결과</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>구성학 결과 계산기</h1>
+  <form id="calculateForm">
+    <label for="seong">성함:</label>
+    <input type="text" id="seong" name="seong" required><br><br>
+    <label for="birthYear">생년:</label>
+    <select id="birthYear" name="birthYear" required>
+      <option value="">선택</option>
+      <option value="1970">1970년</option>
+      <!-- 다른 년도 옵션 추가 -->
+    </select><br><br>
+    <label for="birthMonth">월:</label>
+    <select id="birthMonth" name="birthMonth" required>
+      <option value="">선택</option>
+      <option value="1">1월</option>
+      <!-- 다른 월 옵션 추가 -->
+    </select><br><br>
+    <input type="submit" value="계산">
+  </form>
 
-app = Flask(__name__)
+  <div id="resultContainer" style="display: none;">
+    <h2>결과</h2>
+    <p id="resultText"></p>
+  </div>
 
-@app.route('/', methods=['GET', 'POST'])
-def calculate_ming():
-    if request.method == 'POST':
-        seong = request.form['seong']
-        birth_year = int(request.form['birth_year'])
-        birth_month = int(request.form['birth_month'])
+  <script>
+    $(document).ready(function() {
+      $('#calculateForm').submit(function(e) {
+        e.preventDefault();
 
-        # 본명성 계산
-        ming = sum(int(digit) for digit in str(birth_year))
-        ming = sum(int(digit) for digit in str(ming))
-        ming = 11 - ming
+        var seong = $('#seong').val();
+        var birthYear = parseInt($('#birthYear').val());
+        var birthMonth = parseInt($('#birthMonth').val());
 
-        # 월명성 계산
-        wol = str(birth_month)
+        // 본명성 계산
+        var ming = (birthYear % 100).toString();
+        ming = ming.split('').map(Number).reduce((a, b) => a + b, 0);
+        ming = 11 - (ming % 10);
 
-        return render_template('result.html', seong=seong, ming=ming, wol=wol)
-    else:
-        return render_template('index.html')
+        // 월명성 계산
+        var wol = birthMonth.toString();
 
-if __name__ == '__main__':
-    app.run()
+        // 결과 출력
+        $('#resultText').text(seong + '님의 본명성은 ' + ming + '성, 월명성은 ' + wol + '성 입니다.');
+        $('#resultContainer').show();
+      });
+    });
+  </script>
+</body>
+</html>
