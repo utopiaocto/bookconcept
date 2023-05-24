@@ -64,12 +64,12 @@
             <script>
                 const monthSelect = document.getElementById("month");
                 const months = [
-                    "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해", "자", "축"
+                    "축(1월)", "인(2월)", "묘(3월)", "진(4월)", "사(5월)", "오(6월)", "미(7월)", "신(8월)", "유(9월)", "술(10월)", "해(11월)", "자(12월)"
                 ];
                 for (let month = 1; month <= 12; month++) {
                     const option = document.createElement("option");
                     option.value = month;
-                    option.text = months[month - 1] + "월";
+                    option.text = months[month - 1];
                     monthSelect.appendChild(option);
                 }
             </script>
@@ -98,16 +98,16 @@
 
             // 월명성 구하기
             const zodiacSigns = [
-                [9, 6, 3, 9], // 자오묘유년
-                [3, 9, 6, 3], // 인신사해년
-                [6, 3, 9, 6]  // 진술축미년
+                [6, 3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9], // 자오묘유년
+                [3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9, 6], // 인신사해년
+                [6, 3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9]  // 진술축미년
             ];
             const zodiacIndex = (year - 4) % 12;
             const monthStar = zodiacSigns[zodiacIndex][month - 1];
 
             const resultBox = document.createElement("div");
             resultBox.classList.add("result-box");
-            resultBox.innerHTML = `<p>${year}년 ${month}월은 본명성이 ${birthStar}, 월명성이 ${monthStar}</p>`;
+            resultBox.innerHTML = `<p>${year}년 ${months[month - 1]}은 본명성이 ${birthStar}, 월명성이 ${monthStar}</p>`;
 
             document.getElementById("result").innerHTML = "";
             document.getElementById("result").appendChild(resultBox);
