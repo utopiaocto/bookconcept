@@ -1,0 +1,25 @@
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def calculate_ming():
+    if request.method == 'POST':
+        seong = request.form['seong']
+        birth_year = int(request.form['birth_year'])
+        birth_month = int(request.form['birth_month'])
+
+        # 본명성 계산
+        ming = sum(int(digit) for digit in str(birth_year))
+        ming = sum(int(digit) for digit in str(ming))
+        ming = 11 - ming
+
+        # 월명성 계산
+        wol = str(birth_month)
+
+        return render_template('result.html', seong=seong, ming=ming, wol=wol)
+    else:
+        return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run()
