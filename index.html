@@ -7,28 +7,26 @@
     <form id="form">
         <label for="name">이름:</label>
         <input type="text" id="name" name="name" required><br>
-        <label for="year">태어난 년도:</label><br>
-        <!-- generate rolling select for years from 1940 to 2040 -->
+        <label for="year">태어난 년도:</label>
         <select id="year" name="year">
+            <!-- generate options for years from 1940 to 2040 -->
             <script>
                 for (let i = 1940; i <= 2040; i++) {
-                    document.write('<option value="'+i+'">'+i+'</option>');
+                    document.write('<option value="' + i + '">' + i + '</option>');
                 }
             </script>
-        </select><br><br>
-        <label for="month">태어난 양력월:</label><br>
-        <!-- generate rolling select for months from 1 to 12 -->
+        </select><br>
+        <label for="month">태어난 양력월:</label>
         <select id="month" name="month">
+            <!-- generate options for months from 1 to 12 -->
             <script>
                 for (let i = 1; i <= 12; i++) {
-                    document.write('<option value="'+i+'">'+i+'</option>');
+                    document.write('<option value="' + i + '">' + i + '</option>');
                 }
             </script>
-        </select><br><br>
+        </select><br>
         <input type="submit" value="확인">
     </form>
-
-    <div id="result"></div>
 
     <script>
         document.getElementById("form").addEventListener("submit", function(event) {
@@ -40,13 +38,23 @@
             var month = parseInt(document.getElementById("month").value);
 
             // 결과를 출력하는 부분
-            var stars = getNameAndMonthStars(year, month);
-            document.getElementById("result").innerHTML = stars;
+            var birthStar = calculateBirthStar(year);
+            var monthStar = calculateMonthStar(year, month);
+            var result = "당신의 본명성은 " + birthStar + ", 월명성은 " + monthStar + "입니다.";
+            alert(result);
         });
 
-        function getNameAndMonthStars(year, month) {
-            // 본명성을 계산하기 위한 딕셔너리
-            var birth_stars = {
+        function calculateBirthStar(year) {
+            var digits = year.toString().split('').map(Number);
+            var sum = digits.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            while (sum >= 10) {
+                sum = sum.toString().split('').map(Number).reduce(function(a, b) {
+                    return a + b;
+                }, 0);
+            }
+            var birthStars = {
                 1: "일백수성(一白水星)",
                 2: "이흑토성(二黑土星)",
                 3: "삼벽목성(三碧木星)",
@@ -57,9 +65,12 @@
                 8: "팔백토성(八白土星)",
                 9: "구자화성(九紫火星)"
             };
+            return birthStars[sum];
+        }
 
-            // 월명성을 계산하기 위한 딕셔너리
-            var month_stars = {
+        function calculateMonthStar(year, month) {
+            var stemBranch = calculateStemBranch(year);
+            var monthStars = {
                 '자오묘유': {
                     1: "육백금성(六白金星)",
                     2: "팔백토성(八白土星)",
@@ -103,9 +114,11 @@
                     12: "일백수성(一白水星)"
                 }
             };
+            return monthStars[stemBranch][month];
+        }
 
-            // 60십갑자를 계산하기 위한 딕셔너리
-            var birth_year_stem_branch = {
+        function calculateStemBranch(year) {
+            var birthYearStemBranch = {
                 1924: '갑자', 1984: '갑자', 2044: '갑자', 2104: '갑자',
                 1925: '을축', 1985: '을축',
                 1926: '병인', 1986: '병인',
@@ -167,14 +180,7 @@
                 1982: '임술', 2042: '임술',
                 1983: '계해', 2043: '계해'
             };
-
-            // 연도로 본명성과 월명성 계산
-            var birth_star = birth_stars[year % 10];
-            var stem_branch = birth_year_stem_branch[year];
-            var month_star = month_stars[stem_branch][month];
-
-            var result = "당신의 본명성은 " + birth_star + ", 월명성은 " + month_star + "입니다.";
-            return result;
+            return birthYearStemBranch[year];
         }
     </script>
 </body>
