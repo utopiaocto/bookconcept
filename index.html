@@ -40,18 +40,13 @@
         var year = parseInt(document.getElementById("year").value);
         var month = parseInt(document.getElementById("month").value);
 
-        // 입력값을 서버로 전송하거나 처리하는 로직 추가
-        // 이 부분에서 위에서 구현한 함수를 사용하여 결과를 얻을 수 있습니다
-
         // 결과를 출력하는 부분
         var result = document.getElementById("result");
-        var stars = getNameAndMonthStars(name, year, month);
+        var stars = getNameAndMonthStars(year, month);
         result.innerHTML = stars;
-
-        // 추가적인 처리나 출력을 위한 로직을 이어서 구현할 수 있습니다
     });
 
-    function getNameAndMonthStars(name, year, month) {
+    function getNameAndMonthStars(year, month) {
         // 본명성 이름인 딕셔너리
         var birth_stars = {
             1: "일백수성(一白水星)",
@@ -61,7 +56,7 @@
             5: "오황토성(五黃土星)",
             6: "육백금성(六白金星)",
             7: "칠적금성(七赤金星)",
-            8: "팔백토성(八白土星)",
+             8: "팔백토성(八白土星)",
             9: "구자화성(九紫火星)",
         };
 
@@ -212,7 +207,7 @@
             // 임자년
             1972: '임자', 2032: '임자',
             // 계축년
-             1973: '계축', 2033: '계축',
+            1973: '계축', 2033: '계축',
             // 갑인년
             1974: '갑인', 2034: '갑인', 2094: '갑인', 2154: '갑인',
             // 을묘년
@@ -226,105 +221,24 @@
             // 기미년
             1979: '기미', 2039: '기미',
             // 경신년
-            1980: '경신', 2040: '경신',
+            1980: '경신', 2040: '경신', 2100: '경신', 2160: '경신',
             // 신유년
             1981: '신유', 2041: '신유',
             // 임술년
             1982: '임술', 2042: '임술',
             // 계해년
-            1983: '계해', 2043: '계해'
+            1983: '계해', 2043: '계해',
         };
 
-        // 갑자년 ~ 갑축년의 생년간지 구하기
-        function getBirthStemBranch(year) {
-            var remainder = (year - 4) % 60; // 4년간격에서 0부터 59까지의 나머지
-            var stem_branch = birth_year_stem_branch[remainder];
-            return stem_branch;
-        }
+        // 입력된 연도로 본명성과 월명성을 계산하여 반환하는 함수
+        function getNameAndMonthStars(year, month) {
+            var birth_star = birth_stars[year % 10]; // 본명성 계산
+            var stem_branch = birth_year_stem_branch[year]; // 60갑자 계산
+            var month_star = month_stars[stem_branch][month]; // 월명성 계산
 
-        // 이름과 생년간지로 본명성 구하기
-        function getBirthStar(name, stem_branch) {
-            var last_name = name.charAt(0); // 이름의 첫 글자(성)
-            var last_name_stem_branch = {
-                '김': 1, '이': 2, '박': 3, '최': 4, '정': 5, '강': 6, '조': 7, '윤': 8, '장': 9
-            };
-
-            var last_name_stem_branch_number = last_name_stem_branch[last_name];
-            var birth_star_number = (last_name_stem_branch_number + stem_branch) % 9;
-            if (birth_star_number === 0) {
-                birth_star_number = 9;
-            }
-
-            var birth_star = birth_stars[birth_star_number];
-            return birth_star;
-        }
-
-        // 생년간지와 월을 이용하여 월명성 구하기
-        function getMonthStar(stem_branch, month) {
-            var month_stem_branches = {
-                '자오묘유': {
-                    1: "육백금성(六白金星)",
-                    2: "팔백토성(八白土星)",
-                    3: "칠적금성(七赤金星)",
-                    4: "육백금성(六白金星)",
-                    5: "오황토성(五黃土星)",
-                    6: "사록목성(四綠木星)",
-                    7: "삼벽목성(三碧木星)",
-                    8: "이흑토성(二黑土星)",
-                    9: "일백수성(一白水星)",
-                    10: "구자화성(九紫火星)",
-                    11: "팔백토성(八白土星)",
-                    12: "칠적금성(七赤金星)",
-                },
-                '진술축미': {
-                    1: "삼벽목성(三碧木星)",
-                    2: "오황토성(五黃土星)",
-                    3: "사록목성(四綠木星)",
-                    4: "삼벽목성(三碧木星)",
-                    5: "이흑토성(二黑土星)",
-                    6: "일백수성(一白水星)",
-                    7: "구자화성(九紫火星)",
-                    8: "팔백토성(八白土星)",
-                    9: "칠적금성(七赤金星)",
-                    10: "육백금성(六白金星)",
-                    11: "오황토성(五黃土星)",
-                    12: "사록목성(四綠木星)",
-                },
-                '신유술해': {
-                    1: "구자화성(九紫火星)",
-                    2: "이흑토성(二黑土星)",
-                    3: "일백수성(一白水星)",
-                    4: "구자화성(九紫火星)",
-                    5: "팔백토성(八白土星)",
-                    6: "칠적금성(七赤金星)",
-                    7: "육백금성(六白金星)",
-                    8: "오황토성(五黃土星)",
-                    9: "사록목성(四綠木星)",
-                    10: "삼벽목성(三碧木星)",
-                    11: "이흑토성(二黑土星)",
-                    12: "일백수성(一白水星)",
-                },
-            };
-
-            var month_stem_branch = month_stem_branches[stem_branch];
-            var month_star = month_stem_branch[month];
-            return month_star;
-        }
-
-        // 생년간지, 이름, 월을 이용하여 본명성과 월명성을 찾는 함수
-        function getNameAndMonthStars(name, year, month) {
-            var stem_branch = getBirthStemBranch(year);
-            var birth_star = getBirthStar(name, stem_branch);
-            var month_star = getMonthStar(stem_branch, month);
-
-            var result = "본명성: " + birth_star + "<br>" + "월명성: " + month_star;
+            var result = "당신의 본명성은 " + birth_star + ", 월명성은 " + month_star + "입니다.";
             return result;
         }
-
-        // 함수 실행 및 결과 반환
-        var stars = getNameAndMonthStars(name, year, month);
-        return stars;
-    }
     </script>
 </body>
 </html>
