@@ -1,117 +1,330 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>본명성과 월명성 구하기</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .result-box {
-            background-color: #0f610f;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #0f610f;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+    <title>Name and Month Stars</title>
 </head>
 <body>
-    <h1>본명성과 월명성 구하기</h1>
-    <div>
+    <form id="form">
         <label for="name">이름:</label>
-        <input type="text" id="name">
-    </div>
-    <div>
-        <label for="year">생년:</label>
-        <select id="year">
-            <option value="">-- 선택 --</option>
-            <!-- 생년 선택 옵션 생성 -->
+        <input type="text" id="name" name="name" required><br>
+        <label for="year">태어난년도:</label>
+        <select id="year" name="year" required>
+            <option value="">Select a year</option>
+            <!-- generate years from 1950 to 2040 -->
             <script>
-                const currentYear = new Date().getFullYear();
-                const yearSelect = document.getElementById("year");
-                for (let year = 1950; year <= 2030; year++) {
-                    const option = document.createElement("option");
-                    option.value = year;
-                    option.text = year + "년";
-                    yearSelect.appendChild(option);
-                }
+            for (let i = 1950; i <= 2040; i++) {
+                document.write('<option value="'+i+'">'+i+'</option>');
+            }
             </script>
-        </select>
-    </div>
-    <div>
-        <label for="month">생월:</label>
-        <select id="month">
-            <option value="">-- 선택 --</option>
-            <!-- 생월 선택 옵션 생성 -->
+        </select><br>
+        <label for="month">태어난양력월:</label>
+        <select id="month" name="month" required>
+            <option value="">Select a month</option>
+            <!-- generate months from 1 to 12 -->
             <script>
-                const monthSelect = document.getElementById("month");
-                const months = [
-                    "축(1월)", "인(2월)", "묘(3월)", "진(4월)", "사(5월)", "오(6월)", "미(7월)", "신(8월)", "유(9월)", "술(10월)", "해(11월)", "자(12월)"
-                ];
-                for (let month = 1; month <= 12; month++) {
-                    const option = document.createElement("option");
-                    option.value = month;
-                    option.text = months[month - 1];
-                    monthSelect.appendChild(option);
-                }
+            for (let i = 1; i <= 12; i++) {
+                document.write('<option value="'+i+'">'+i+'</option>');
+            }
             </script>
-        </select>
-    </div>
-    <button onclick="calculate()">결과 보기</button>
+        </select><br>
+        <input type="submit" value="Submit">
+    </form>
     <div id="result"></div>
 
     <script>
-        function calculate() {
-            const name = document.getElementById("name").value;
-            const year = parseInt(document.getElementById("year").value);
-            const month = parseInt(document.getElementById("month").value);
+    document.getElementById("form").addEventListener("submit", function(event) {
+        event.preventDefault(); // 폼 제출 기본 동작 막기
 
-            if (!name || !year || !month) {
-                alert("이름과 생년월을 모두 선택해주세요.");
-                return;
-            }
+        // 사용자 입력값 가져오기
+        var name = document.getElementById("name").value;
+        var year = parseInt(document.getElementById("year").value);
+        var month = parseInt(document.getElementById("month").value);
 
-            // 본명성 구하기
-            let birthYear = year;
-            while (birthYear > 9) {
-                birthYear = Array.from(String(birthYear), Number).reduce((a, b) => a + b);
-            }
-            const birthStar = 11 - birthYear;
+        // 입력값을 서버로 전송하거나 처리하는 로직 추가
+        // 이 부분에서 위에서 구현한 함수를 사용하여 결과를 얻을 수 있습니다
 
-            // 월명성 구하기
-            const zodiacSigns = [
-                [6, 3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9], // 자오묘유년
-                [3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9, 6], // 인신사해년
-                [6, 3, 9, 6, 3, 9, 6, 3, 9, 6, 3, 9]  // 진술축미년
-            ];
-            const zodiacIndex = (year - 4) % 12;
-            const monthStar = zodiacSigns[zodiacIndex][month - 1];
+        // 결과를 출력하는 부분
+        var result = document.getElementById("result");
+        var stars = getNameAndMonthStars(name, year, month);
+        result.innerHTML = stars;
 
-            const resultBox = document.createElement("div");
-            resultBox.classList.add("result-box");
-            resultBox.innerHTML = `<p>${year}년 ${months[month - 1]}은 본명성이 ${birthStar}, 월명성이 ${monthStar}</p>`;
+        // 추가적인 처리나 출력을 위한 로직을 이어서 구현할 수 있습니다
+    });
 
-            document.getElementById("result").innerHTML = "";
-            document.getElementById("result").appendChild(resultBox);
+    function getNameAndMonthStars(name, year, month) {
+        // 본명성 이름인 딕셔너리
+        var birth_stars = {
+            1: "일백수성(一白水星)",
+            2: "이흑토성(二黑土星)",
+            3: "삼벽목성(三碧木星)",
+            4: "사록목성(四綠木星)",
+            5: "오황토성(五黃土星)",
+            6: "육백금성(六白金星)",
+            7: "칠적금성(七赤金星)",
+            8: "팔백토성(八白土星)",
+            9: "구자화성(九紫火星)",
+        };
+
+        // 년도에 연동해서 월명성 구하기 위한 딕셔너리
+        var month_stars = {
+            '자오묘유': {
+                1: "육백금성(六白金星)",
+                2: "팔백토성(八白土星)",
+                3: "칠적금성(七赤金星)",
+                4: "육백금성(六白金星)",
+                5: "오황토성(五黃土星)",
+                6: "사록목성(四綠木星)",
+                7: "삼벽목성(三碧木星)",
+                8: "이흑토성(二黑土星)",
+                9: "일백수성(一白水星)",
+                10: "구자화성(九紫火星)",
+                11: "팔백토성(八白土星)",
+                12: "칠적금성(七赤金星)",
+            },
+            '진술축미': {
+                1: "삼벽목성(三碧木星)",
+                2: "오황토성(五黃土星)",
+                3: "사록목성(四綠木星)",
+                4: "삼벽목성(三碧木星)",
+                5: "이흑토성(二黑土星)",
+                6: "일백수성(一白水星)",
+                7: "구자화성(九紫火星)",
+                8: "팔백토성(八白土星)",
+                9: "칠적금성(七赤金星)",
+                10: "육백금성(六白金星)",
+                11: "오황토성(五黃土星)",
+                12: "사록목성(四綠木星)",
+            },
+            '신유술해': {
+                1: "구자화성(九紫火星)",
+                2: "이흑토성(二黑土星)",
+                3: "일백수성(一白水星)",
+                4: "구자화성(九紫火星)",
+                5: "팔백토성(八白土星)",
+                6: "칠적금성(七赤金星)",
+                7: "육백금성(六白金星)",
+                8: "오황토성(五黃土星)",
+                9: "사록목성(四綠木星)",
+                10: "삼벽목성(三碧木星)",
+                11: "이흑토성(二黑土星)",
+                12: "일백수성(一白水星)",
+            },
+        };
+
+        // 60갑자 딕셔너리
+        var birth_year_stem_branch = {
+            // 갑자년
+            1924: '갑자', 1984: '갑자', 2044: '갑자', 2104: '갑자',
+            // 을축년
+            1925: '을축', 1985: '을축',
+            // 병인년
+            1926: '병인', 1986: '병인',
+            // 정묘년
+            1927: '정묘', 1987: '정묘',
+            // 무진년
+            1928: '무진', 1988: '무진',
+            // 기사년
+            1929: '기사', 1989: '기사',
+            // 경오년
+            1930: '경오', 1990: '경오',
+            // 신미년
+            1931: '신미', 1991: '신미',
+            // 임신년
+            1932: '임신', 1992: '임신',
+            // 계유년
+            1933: '계유', 1993: '계유',
+            // 갑술년
+            1934: '갑술', 1994: '갑술', 2054: '갑술', 2114: '갑술',
+            // 을해년
+            1935: '을해', 1995: '을해',
+            // 병자년
+            1936: '병자', 1996: '병자',
+            // 정축년
+            1937: '정축', 1997: '정축',
+            // 무인년
+            1938: '무인', 1998: '무인',
+            // 기묘년
+            1939: '기묘', 1999: '기묘',
+            // 경진년
+            1940: '경진', 2000: '경진',
+            // 신사년
+            1941: '신사', 2001: '신사',
+            // 임오년
+            1942: '임오', 2002: '임오',
+            // 계미년
+            1943: '계미', 2003: '계미',
+            // 갑신년
+            1944: '갑신', 2004: '갑신', 2064: '갑신', 2124: '갑신',
+            // 을유년
+            1945: '을유', 2005: '을유',
+            // 병술년
+            1946: '병술', 2006: '병술',
+            // 정해년
+            1947: '정해', 2007: '정해',
+            // 무자년
+            1948: '무자', 2008: '무자',
+            // 기축년
+            1949: '기축', 2009: '기축',
+            // 경인년
+            1950: '경인', 2010: '경인',
+            // 신묘년
+            1951: '신묘', 2011: '신묘',
+            // 임진년
+            1952: '임진', 2012: '임진',
+            // 계사년
+            1953: '계사', 2013: '계사',
+            // 갑오년
+            1954: '갑오', 2014: '갑오', 2074: '갑오', 2134: '갑오',
+            // 을미년
+            1955: '을미', 2015: '을미',
+            // 병신년
+            1956: '병신', 2016: '병신',
+            // 정유년
+            1957: '정유', 2017: '정유',
+            // 무술년
+            1958: '무술', 2018: '무술',
+            // 기해년
+            1959: '기해', 2019: '기해',
+            // 경자년
+            1960: '경자', 2020: '경자',
+            // 신축년
+            1961: '신축', 2021: '신축',
+            // 임인년
+            1962: '임인', 2022: '임인',
+            // 계묘년
+            1963: '계묘', 2023: '계묘',
+            // 갑진년
+            1964: '갑진', 2024: '갑진', 2084: '갑진', 2144: '갑진',
+            // 을사년
+            1965: '을사', 2025: '을사',
+            // 병오년
+            1966: '병오', 2026: '병오',
+            // 정미년
+            1967: '정미', 2027: '정미',
+            // 무신년
+            1968: '무신', 2028: '무신',
+            // 기유년
+            1969: '기유', 2029: '기유',
+            // 경술년
+            1970: '경술', 2030: '경술',
+            // 신해년
+            1971: '신해', 2031: '신해',
+            // 임자년
+            1972: '임자', 2032: '임자',
+            // 계축년
+             1973: '계축', 2033: '계축',
+            // 갑인년
+            1974: '갑인', 2034: '갑인', 2094: '갑인', 2154: '갑인',
+            // 을묘년
+            1975: '을묘', 2035: '을묘',
+            // 병진년
+            1976: '병진', 2036: '병진',
+            // 정사년
+            1977: '정사', 2037: '정사',
+            // 무오년
+            1978: '무오', 2038: '무오',
+            // 기미년
+            1979: '기미', 2039: '기미',
+            // 경신년
+            1980: '경신', 2040: '경신',
+            // 신유년
+            1981: '신유', 2041: '신유',
+            // 임술년
+            1982: '임술', 2042: '임술',
+            // 계해년
+            1983: '계해', 2043: '계해'
+        };
+
+        // 갑자년 ~ 갑축년의 생년간지 구하기
+        function getBirthStemBranch(year) {
+            var remainder = (year - 4) % 60; // 4년간격에서 0부터 59까지의 나머지
+            var stem_branch = birth_year_stem_branch[remainder];
+            return stem_branch;
         }
+
+        // 이름과 생년간지로 본명성 구하기
+        function getBirthStar(name, stem_branch) {
+            var last_name = name.charAt(0); // 이름의 첫 글자(성)
+            var last_name_stem_branch = {
+                '김': 1, '이': 2, '박': 3, '최': 4, '정': 5, '강': 6, '조': 7, '윤': 8, '장': 9
+            };
+
+            var last_name_stem_branch_number = last_name_stem_branch[last_name];
+            var birth_star_number = (last_name_stem_branch_number + stem_branch) % 9;
+            if (birth_star_number === 0) {
+                birth_star_number = 9;
+            }
+
+            var birth_star = birth_stars[birth_star_number];
+            return birth_star;
+        }
+
+        // 생년간지와 월을 이용하여 월명성 구하기
+        function getMonthStar(stem_branch, month) {
+            var month_stem_branches = {
+                '자오묘유': {
+                    1: "육백금성(六白金星)",
+                    2: "팔백토성(八白土星)",
+                    3: "칠적금성(七赤金星)",
+                    4: "육백금성(六白金星)",
+                    5: "오황토성(五黃土星)",
+                    6: "사록목성(四綠木星)",
+                    7: "삼벽목성(三碧木星)",
+                    8: "이흑토성(二黑土星)",
+                    9: "일백수성(一白水星)",
+                    10: "구자화성(九紫火星)",
+                    11: "팔백토성(八白土星)",
+                    12: "칠적금성(七赤金星)",
+                },
+                '진술축미': {
+                    1: "삼벽목성(三碧木星)",
+                    2: "오황토성(五黃土星)",
+                    3: "사록목성(四綠木星)",
+                    4: "삼벽목성(三碧木星)",
+                    5: "이흑토성(二黑土星)",
+                    6: "일백수성(一白水星)",
+                    7: "구자화성(九紫火星)",
+                    8: "팔백토성(八白土星)",
+                    9: "칠적금성(七赤金星)",
+                    10: "육백금성(六白金星)",
+                    11: "오황토성(五黃土星)",
+                    12: "사록목성(四綠木星)",
+                },
+                '신유술해': {
+                    1: "구자화성(九紫火星)",
+                    2: "이흑토성(二黑土星)",
+                    3: "일백수성(一白水星)",
+                    4: "구자화성(九紫火星)",
+                    5: "팔백토성(八白土星)",
+                    6: "칠적금성(七赤金星)",
+                    7: "육백금성(六白金星)",
+                    8: "오황토성(五黃土星)",
+                    9: "사록목성(四綠木星)",
+                    10: "삼벽목성(三碧木星)",
+                    11: "이흑토성(二黑土星)",
+                    12: "일백수성(一白水星)",
+                },
+            };
+
+            var month_stem_branch = month_stem_branches[stem_branch];
+            var month_star = month_stem_branch[month];
+            return month_star;
+        }
+
+        // 생년간지, 이름, 월을 이용하여 본명성과 월명성을 찾는 함수
+        function getNameAndMonthStars(name, year, month) {
+            var stem_branch = getBirthStemBranch(year);
+            var birth_star = getBirthStar(name, stem_branch);
+            var month_star = getMonthStar(stem_branch, month);
+
+            var result = "본명성: " + birth_star + "<br>" + "월명성: " + month_star;
+            return result;
+        }
+
+        // 함수 실행 및 결과 반환
+        var stars = getNameAndMonthStars(name, year, month);
+        return stars;
+    }
     </script>
 </body>
 </html>
