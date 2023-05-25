@@ -8,25 +8,27 @@
         <label for="name">이름:</label>
         <input type="text" id="name" name="name" required><br>
         <label for="year">태어난 년도:</label><br>
-        <!-- generate radio buttons for years from 1940 to 2040 -->
-        <script>
-            for (let i = 1940; i <= 2040; i++) {
-                document.write('<input type="radio" id="year'+i+'" name="year" value="'+i+'">');
-                document.write('<label for="year'+i+'">'+i+'</label><br>');
-            }
-        </script>
-        <br>
+        <!-- generate rolling select for years from 1940 to 2040 -->
+        <select id="year" name="year">
+            <script>
+                for (let i = 1940; i <= 2040; i++) {
+                    document.write('<option value="'+i+'">'+i+'</option>');
+                }
+            </script>
+        </select><br><br>
         <label for="month">태어난 양력월:</label><br>
-        <!-- generate radio buttons for months from 1 to 12 -->
-        <script>
-            for (let i = 1; i <= 12; i++) {
-                document.write('<input type="radio" id="month'+i+'" name="month" value="'+i+'">');
-                document.write('<label for="month'+i+'">'+i+'</label><br>');
-            }
-        </script>
-        <br>
+        <!-- generate rolling select for months from 1 to 12 -->
+        <select id="month" name="month">
+            <script>
+                for (let i = 1; i <= 12; i++) {
+                    document.write('<option value="'+i+'">'+i+'</option>');
+                }
+            </script>
+        </select><br><br>
         <input type="submit" value="확인">
     </form>
+
+    <div id="result"></div>
 
     <script>
         document.getElementById("form").addEventListener("submit", function(event) {
@@ -34,12 +36,12 @@
 
             // 사용자 입력값 가져오기
             var name = document.getElementById("name").value;
-            var year = parseInt(document.querySelector('input[name="year"]:checked').value);
-            var month = parseInt(document.querySelector('input[name="month"]:checked').value);
+            var year = parseInt(document.getElementById("year").value);
+            var month = parseInt(document.getElementById("month").value);
 
             // 결과를 출력하는 부분
             var stars = getNameAndMonthStars(year, month);
-            alert(stars);
+            document.getElementById("result").innerHTML = stars;
         });
 
         function getNameAndMonthStars(year, month) {
@@ -88,7 +90,7 @@
                 },
                 '신유술해': {
                     1: "구자화성(九紫火星)",
-                     2: "이흑토성(二黑土星)",
+                    2: "이흑토성(二黑土星)",
                     3: "일백수성(一白水星)",
                     4: "구자화성(九紫火星)",
                     5: "팔백토성(八白土星)",
@@ -162,7 +164,7 @@
                 1979: '기미', 2039: '기미',
                 1980: '경신', 2040: '경신', 2100: '경신', 2160: '경신',
                 1981: '신유', 2041: '신유',
-                 1982: '임술', 2042: '임술',
+                1982: '임술', 2042: '임술',
                 1983: '계해', 2043: '계해'
             };
 
