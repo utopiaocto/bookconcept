@@ -1,54 +1,4 @@
-function calculateYearMingseong(year, month) {
-  // 년명성 계산
-  var yearSum = year.toString().split('').map(Number).reduce((a, b) => a + b);
-  var yearMingseong = 11 - (yearSum % 10);
-  
-  // 월명성 계산
-  var monthStars = {
-    '자오묘유': {
-      1: "육백금성(六白金星)",
-      2: "팔백토성(八白土星)",
-      3: "칠적금성(七赤金星)",
-      4: "육백금성(六白金星)",
-      5: "오황토성(五黃土星)",
-      6: "사록목성(四綠木星)",
-      7: "삼벽목성(三碧木星)",
-      8: "이흑토성(二黑土星)",
-      9: "일백수성(一白水星)",
-      10: "구자화성(九紫火星)",
-      11: "팔백토성(八白土星)",
-      12: "칠적금성(七赤金星)"
-    },
-    '진술축미': {
-      1: "삼벽목성(三碧木星)",
-      2: "오황토성(五黃土星)",
-      3: "사록목성(四綠木星)",
-      4: "삼벽목성(三碧木星)",
-      5: "이흑토성(二黑土星)",
-      6: "일백수성(一白水星)",
-      7: "구자화성(九紫火星)",
-      8: "팔백토성(八白土星)",
-      9: "칠적금성(七赤金星)",
-      10: "육백금성(六白金星)",
-      11: "오황토성(五黃土星)",
-      12: "사록목성(四綠木星)"
-    },
-    '신유술해': {
-      1: "구자화성(九紫火星)",
-      2: "이흑토성(二黑土星)",
-      3: "일백수성(一白水星)",
-      4: "구자화성(九紫火星)",
-      5: "팔백토성(八白土星)",
-      6: "칠적금성(七赤金星)",
-      7: "육백금성(六白金星)",
-      8: "오황토성(五黃土星)",
-      9: "사록목성(四綠木星)",
-      10: "삼벽목성(三碧木星)",
-      11: "이흑토성(二黑土星)",
-      12: "일백수성(一白水星)"
-    }
-  };
-
+function calculateStemBranch(year, month) {
   var birthYearStemBranch = {
     1924: '갑자', 1984: '갑자', 2044: '갑자', 2104: '갑자',
     1925: '을축', 1985: '을축',
@@ -70,7 +20,7 @@ function calculateYearMingseong(year, month) {
     1941: '신사', 2001: '신사',
     1942: '임오', 2002: '임오',
     1943: '계미', 2003: '계미',
-    1944: '갑신', 2004: '갑신', 2064: '갑신', 2124: '갑신',
+     1944: '갑신', 2004: '갑신', 2064: '갑신', 2124: '갑신',
     1945: '을유', 2005: '을유',
     1946: '병술', 2006: '병술',
     1947: '정해', 2007: '정해',
@@ -80,7 +30,7 @@ function calculateYearMingseong(year, month) {
     1951: '신묘', 2011: '신묘',
     1952: '임진', 2012: '임진',
     1953: '계사', 2013: '계사',
-    1954: '갑오', 2014: '갑오', 2074: '갑오', 2134: '갑오',
+     1954: '갑오', 2014: '갑오', 2074: '갑오', 2134: '갑오',
     1955: '을미', 2015: '을미',
     1956: '병신', 2016: '병신',
     1957: '정유', 2017: '정유',
@@ -112,22 +62,35 @@ function calculateYearMingseong(year, month) {
     1983: '계해', 2043: '계해'
   };
 
-  var yearStemBranch = birthYearStemBranch[year];
+  var monthStemBranch = {
+    '자': 9, '묘': 9, '오': 9, '유': 9, 
+    '술': 6, '진': 6, '축': 6, '미': 6,
+    '인': 3, '신': 3, '해': 3, '사': 3 
+  };
 
-  if (!yearStemBranch) {
-    return "해당 연도에 대한 정보를 찾을 수 없습니다.";
+  var birthYear = parseInt(year);
+  var birthMonth = parseInt(month);
+
+  var birthStemBranch = birthYearStemBranch[birthYear];
+  var monthStemBranchValue = monthStemBranch[birthMonth];
+
+  if (monthStemBranchValue === undefined) {
+    monthStemBranchValue = 0;
   }
 
-  var yearMingseongName = yearStemBranch.split('')[1] + yearMingseong;
+  var result = {
+    birthStemBranch: birthStemBranch,
+    monthStemBranch: monthStemBranchValue
+  };
 
-  var monthStemBranch = yearStemBranch.split('')[0] + month;
-  var monthMingseongName = monthStars[monthStemBranch][month];
-
-  return "당신의 본명성은 " + yearMingseongName + ", 월명성은 " + monthMingseongName + "입니다.";
+  return result;
 }
 
-var year = parseInt(prompt("태어난 년도를 입력하세요."));
-var month = parseInt(prompt("태어난 월을 입력하세요."));
+var year = parseInt(prompt('태어난 해를 입력하세요 (예: 1985)'));
+var month = parseInt(prompt('태어난 월을 입력하세요 (예: 5)'));
 
-var result = calculateYearMingseong(year, month);
-alert(result);
+var result = calculateStemBranch(year, month);
+
+console.log('당신의 본명성과 월명성은 다음과 같습니다.');
+console.log('본명성: ' + result.birthStemBranch);
+console.log('월명성: ' + result.monthStemBranch);
