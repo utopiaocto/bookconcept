@@ -59,7 +59,7 @@
                 1975: '을묘', 2035: '을묘',
                 1976: '병진', 2036: '병진',
                 1977: '정사', 2037: '정사',
-                1978: '무오', 2038: '무오',
+                 1978: '무오', 2038: '무오',
                 1979: '기미', 2039: '기미',
                 1980: '경신', 2040: '경신', 2100: '경신', 2160: '경신',
                 1981: '신유', 2041: '신유',
@@ -116,6 +116,35 @@
             var month = parseInt(document.getElementById('month').value);
 
             var birthStemBranch = birthYearStemBranch[year];
+            var monthStemBranch = '';
+
+            if (birthStemBranch) {
+                var yearSum = year.toString().split('').reduce(function(a, b) {
+                    return parseInt(a) + parseInt(b);
+                });
+                var finalSum = yearSum;
+                if (yearSum >= 10) {
+                    finalSum = yearSum.toString().split('').reduce(function(a, b) {
+                        return parseInt(a) + parseInt(b);
+                    });
+                }
+                var birthStarIndex = 11 - finalSum;
+
+                var birthStars = {
+                    1: "일백수성(一白水星)",
+                    2: "이흑토성(二黑土星)",
+                    3: "삼벽목성(三碧木星)",
+                    4: "사록목성(四綠木星)",
+                    5: "오황토성(五黃土星)",
+                    6: "육백금성(六白金星)",
+                    7: "칠적금성(七赤金星)",
+                    8: "팔백토성(八白土星)",
+                    9: "구자화성(九紫火星)"
+                };
+
+                birthStemBranch = birthStars[birthStarIndex];
+            }
+
             var monthStemBranch = '';
 
             if (birthStemBranch) {
