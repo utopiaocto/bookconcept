@@ -4,8 +4,46 @@
     <title>Name and Month Stars</title>
 </head>
 <body>
+    <form id="form">
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="year">태어난 년도:</label><br>
+        <!-- generate radio buttons for years from 1940 to 2040 -->
+        <script>
+            for (let i = 1940; i <= 2040; i++) {
+                document.write('<input type="radio" id="year'+i+'" name="year" value="'+i+'">');
+                document.write('<label for="year'+i+'">'+i+'</label><br>');
+            }
+        </script>
+        <br>
+        <label for="month">태어난 양력월:</label><br>
+        <!-- generate radio buttons for months from 1 to 12 -->
+        <script>
+            for (let i = 1; i <= 12; i++) {
+                document.write('<input type="radio" id="month'+i+'" name="month" value="'+i+'">');
+                document.write('<label for="month'+i+'">'+i+'</label><br>');
+            }
+        </script>
+        <br>
+        <input type="submit" value="확인">
+    </form>
+
     <script>
+        document.getElementById("form").addEventListener("submit", function(event) {
+            event.preventDefault(); // 폼 제출 기본 동작 막기
+
+            // 사용자 입력값 가져오기
+            var name = document.getElementById("name").value;
+            var year = parseInt(document.querySelector('input[name="year"]:checked').value);
+            var month = parseInt(document.querySelector('input[name="month"]:checked').value);
+
+            // 결과를 출력하는 부분
+            var stars = getNameAndMonthStars(year, month);
+            alert(stars);
+        });
+
         function getNameAndMonthStars(year, month) {
+            // 본명성을 계산하기 위한 딕셔너리
             var birth_stars = {
                 1: "일백수성(一白水星)",
                 2: "이흑토성(二黑土星)",
@@ -18,6 +56,7 @@
                 9: "구자화성(九紫火星)"
             };
 
+            // 월명성을 계산하기 위한 딕셔너리
             var month_stars = {
                 '자오묘유': {
                     1: "육백금성(六白金星)",
@@ -28,41 +67,42 @@
                     6: "사록목성(四綠木星)",
                     7: "삼벽목성(三碧木星)",
                     8: "이흑토성(二黑土星)",
-                     9: "일백수성(一白水星)",
-                     10: "구자화성(九紫火星)",
-                     11: "팔백토성(八白土星)",
-                    12: "칠적금성(七赤金星)",
+                    9: "일백수성(一白水星)",
+                    10: "구자화성(九紫火星)",
+                    11: "팔백토성(八白土星)",
+                    12: "칠적금성(七赤金星)"
                 },
                 '진술축미': {
-                     1: "삼벽목성(三碧木星)",
-                     2: "오황토성(五黃土星)",
-                     3: "사록목성(四綠木星)",
-                     4: "삼벽목성(三碧木星)",
-                     5: "이흑토성(二黑土星)",
-                     6: "일백수성(一白水星)",
-                     7: "구자화성(九紫火星)",
+                    1: "삼벽목성(三碧木星)",
+                    2: "오황토성(五黃土星)",
+                    3: "사록목성(四綠木星)",
+                    4: "삼벽목성(三碧木星)",
+                    5: "이흑토성(二黑土星)",
+                    6: "일백수성(一白水星)",
+                    7: "구자화성(九紫火星)",
                     8: "팔백토성(八白土星)",
-                     9: "칠적금성(七赤金星)",
+                    9: "칠적금성(七赤金星)",
                     10: "육백금성(六白金星)",
-                     11: "오황토성(五黃土星)",
-                    12: "사록목성(四綠木星)",
+                    11: "오황토성(五黃土星)",
+                    12: "사록목성(四綠木星)"
                 },
                 '신유술해': {
                     1: "구자화성(九紫火星)",
                      2: "이흑토성(二黑土星)",
                     3: "일백수성(一白水星)",
-                     4: "구자화성(九紫火星)",
-                     5: "팔백토성(八白土星)",
+                    4: "구자화성(九紫火星)",
+                    5: "팔백토성(八白土星)",
                     6: "칠적금성(七赤金星)",
-                     7: "육백금성(六白金星)",
-                     8: "오황토성(五黃土星)",
+                    7: "육백금성(六白金星)",
+                    8: "오황토성(五黃土星)",
                     9: "사록목성(四綠木星)",
                     10: "삼벽목성(三碧木星)",
-                     11: "이흑토성(二黑土星)",
-                    12: "일백수성(一白水星)",
-                },
+                    11: "이흑토성(二黑土星)",
+                    12: "일백수성(一白水星)"
+                }
             };
 
+            // 60십갑자를 계산하기 위한 딕셔너리
             var birth_year_stem_branch = {
                 1924: '갑자', 1984: '갑자', 2044: '갑자', 2104: '갑자',
                 1925: '을축', 1985: '을축',
@@ -122,10 +162,11 @@
                 1979: '기미', 2039: '기미',
                 1980: '경신', 2040: '경신', 2100: '경신', 2160: '경신',
                 1981: '신유', 2041: '신유',
-                1982: '임술', 2042: '임술',
-                1983: '계해', 2043: '계해',
+                 1982: '임술', 2042: '임술',
+                1983: '계해', 2043: '계해'
             };
 
+            // 연도로 본명성과 월명성 계산
             var birth_star = birth_stars[year % 10];
             var stem_branch = birth_year_stem_branch[year];
             var month_star = month_stars[stem_branch][month];
@@ -133,13 +174,6 @@
             var result = "당신의 본명성은 " + birth_star + ", 월명성은 " + month_star + "입니다.";
             return result;
         }
-
-        var name = prompt("이름을 입력하세요:");
-        var year = parseInt(prompt("태어난 년도를 입력하세요:"));
-        var month = parseInt(prompt("태어난 양력월을 입력하세요:"));
-
-        var stars = getNameAndMonthStars(year, month);
-        alert(stars);
     </script>
 </body>
 </html>
