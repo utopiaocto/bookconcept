@@ -1,188 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>본명성과 월명성 계산</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책쓰기 비법</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-8 bg-green-50">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center">책쓰기 비법 템플릿</h1>
+        
+        <form id="bookForm" class="space-y-8">
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold mb-4">책 컨셉과 요구사항</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block mb-2 font-bold" for="title">책 제목</label>
+                        <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded">
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-bold" for="keywords">목차 키워드</label>
+                        <input type="text" id="keywords" name="keywords" class="w-full px-3 py-2 border border-gray-300 rounded">
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-bold" for="readers">독자</label>
+                        <input type="text" id="readers" name="readers" class="w-full px-3 py-2 border border-gray-300 rounded">
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-bold" for="background">책 배경</label>
+                        <textarea id="background" name="background" class="w-full px-3 py-2 border border-gray-300 rounded h-32"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold mb-4">에피소드 상세</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block mb-2 font-bold" for="episodeNumber">에피소드 번호</label>
+                        <input type="text" id="episodeNumber" name="episodeNumber" class="w-full px-3 py-2 border border-gray-300 rounded">
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-bold" for="episodeTitle">에피소드 제목</label>
+                        <input type="text" id="episodeTitle" name="episodeTitle" class="w-full px-3 py-2 border border-gray-300 rounded">
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-bold">키워드</label>
+                        <div class="space-y-2">
+                            <input type="text" name="keyword1" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="키워드 1">
+                            <input type="text" name="keyword2" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="키워드 2">
+                            <input type="text" name="keyword3" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="키워드 3">
+                            <input type="text" name="keyword4" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="키워드 4">
+                            <input type="text" name="keyword5" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="키워드 5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-bold" for="contentFormat">내용 형식</label>
+                        <select id="contentFormat" name="contentFormat" class="w-full px-3 py-2 border border-gray-300 rounded">
+                            <option value="essay">에세이</option>
+                            <option value="guide">가이드북</option>
+                            <option value="poem">시</option>
+                            <option value="novel">소설</option>
+                            <option value="thesis">논문</option>
+                            <option value="bullet">개조식</option>
+                            <option value="youtube">유튜브 스크립트</option>
+                            <option value="interview">인터뷰</option>
+                            <option value="column">칼럼</option>
+                            <option value="review">리뷰</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 font-bold" for="content">내용</label>
+                        <textarea id="content" name="content" class="w-full h-64 px-3 py-2 border border-gray-300 rounded" placeholder="선택한 내용 형식에 맞춰 내용을 여기에 입력하세요."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center space-x-4">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded">
+                    링크 생성하기
+                </button>
+                <button type="button" onclick="exportToMarkdown()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded">
+                    마크다운으로 내보내기
+                </button>
+            </div>
+        </form>
+
+        <div id="shareLink" class="mt-8 hidden">
+            <h2 class="text-2xl font-bold mb-4">공유 링크</h2>
+            <div class="bg-white p-4 rounded shadow break-all">
+                <p id="shareLinkText"></p>
+                <button onclick="copyShareLink()" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    링크 복사
+                </button>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-500">
+            &copy; 2024 퀀텀옥토(정진혁). All rights reserved.
+        </footer>
+    </div>
+
     <script>
-        function calculateStemBranch() {
-            var birthYearStemBranch = {
-                1924: '갑자', 1984: '갑자', 2044: '갑자', 2104: '갑자',
-                1925: '을축', 1985: '을축',
-                1926: '병인', 1986: '병인',
-                1927: '정묘', 1987: '정묘',
-                1928: '무진', 1988: '무진',
-                1929: '기사', 1989: '기사',
-                1930: '경오', 1990: '경오',
-                1931: '신미', 1991: '신미',
-                1932: '임신', 1992: '임신',
-                1933: '계유', 1993: '계유',
-                1934: '갑술', 1994: '갑술', 2054: '갑술', 2114: '갑술',
-                1935: '을해', 1995: '을해',
-                1936: '병자', 1996: '병자',
-                1937: '정축', 1997: '정축',
-                1938: '무인', 1998: '무인',
-                1939: '기묘', 1999: '기묘',
-                1940: '경진', 2000: '경진',
-                1941: '신사', 2001: '신사',
-                1942: '임오', 2002: '임오',
-                1943: '계미', 2003: '계미',
-                 1944: '갑신', 2004: '갑신', 2064: '갑신', 2124: '갑신',
-                1945: '을유', 2005: '을유',
-                1946: '병술', 2006: '병술',
-                1947: '정해', 2007: '정해',
-                1948: '무자', 2008: '무자',
-                1949: '기축', 2009: '기축',
-                1950: '경인', 2010: '경인',
-                1951: '신묘', 2011: '신묘',
-                1952: '임진', 2012: '임진',
-                1953: '계사', 2013: '계사',
-                 1954: '갑오', 2014: '갑오', 2074: '갑오', 2134: '갑오',
-                1955: '을미', 2015: '을미',
-                1956: '병신', 2016: '병신',
-                1957: '정유', 2017: '정유',
-                1958: '무술', 2018: '무술',
-                1959: '기해', 2019: '기해',
-                1960: '경자', 2020: '경자',
-                1961: '신축', 2021: '신축',
-                1962: '임인', 2022: '임인',
-                1963: '계묘', 2023: '계묘',
-                1964: '갑진', 2024: '갑진', 2084: '갑진', 2144: '갑진',
-                1965: '을사', 2025: '을사',
-                1966: '병오', 2026: '병오',
-                1967: '정미', 2027: '정미',
-                1968: '무신', 2028: '무신',
-                1969: '기유', 2029: '기유',
-                1970: '경술', 2030: '경술',
-                1971: '신해', 2031: '신해',
-                1972: '임자', 2032: '임자',
-                1973: '계축', 2033: '계축',
-                1974: '갑인', 2034: '갑인', 2094: '갑인', 2154: '갑인',
-                1975: '을묘', 2035: '을묘',
-                1976: '병진', 2036: '병진',
-                1977: '정사', 2037: '정사',
-                 1978: '무오', 2038: '무오',
-                1979: '기미', 2039: '기미',
-                1980: '경신', 2040: '경신', 2100: '경신', 2160: '경신',
-                1981: '신유', 2041: '신유',
-                1982: '임술', 2042: '임술',
-                1983: '계해', 2043: '계해'
-            };
-
-            var monthStars = {
-                '자오묘유': {
-                    1: "육백금성(六白金星)",
-                    2: "팔백토성(八白土星)",
-                    3: "칠적금성(七赤金星)",
-                    4: "육백금성(六白金星)",
-                    5: "오황토성(五黃土星)",
-                    6: "사록목성(四綠木星)",
-                    7: "삼벽목성(三碧木星)",
-                     8: "이흑토성(二黑土星)",
-                     9: "일백수성(一白水星)",
-                    10: "구자화성(九紫火星)",
-                    11: "팔백토성(八白土星)",
-                     12: "칠적금성(七赤金星)"
-                },
-                '진술축미': {
-                    1: "삼벽목성(三碧木星)",
-                    2: "오황토성(五黃土星)",
-                    3: "사록목성(四綠木星)",
-                    4: "삼벽목성(三碧木星)",
-                    5: "이흑토성(二黑土星)",
-                    6: "일백수성(一白水星)",
-                    7: "구자화성(九紫火星)",
-                    8: "팔백토성(八白土星)",
-                    9: "칠적금성(七赤金星)",
-                    10: "육백금성(六白金星)",
-                    11: "오황토성(五黃土星)",
-                     12: "사록목성(四綠木星)"
-                },
-                '신유술해': {
-                    1: "구자화성(九紫火星)",
-                    2: "이흑토성(二黑土星)",
-                    3: "일백수성(一白水星)",
-                     4: "구자화성(九紫火星)",
-                     5: "팔백토성(八白土星)",
-                     6: "칠적금성(七赤金星)",
-                    7: "육백금성(六白金星)",
-                     8: "오황토성(五黃土星)",
-                     9: "사록목성(四綠木星)",
-                    10: "삼벽목성(三碧木星)",
-                    11: "이흑토성(二黑土星)",
-                     12: "일백수성(一白水星)"
+        // URL에서 파라미터 읽기
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const formData = {};
+            for (const [key, value] of params) {
+                const element = document.getElementsByName(key)[0];
+                if (element) {
+                    element.value = decodeURIComponent(value);
                 }
-            };
-
-            var year = parseInt(document.getElementById('year').value);
-            var month = parseInt(document.getElementById('month').value);
-
-            var birthStemBranch = birthYearStemBranch[year];
-            var monthStemBranch = '';
-
-            if (birthStemBranch) {
-                var yearSum = year.toString().split('').reduce(function(a, b) {
-                    return parseInt(a) + parseInt(b);
-                });
-                var finalSum = yearSum;
-                if (yearSum >= 10) {
-                    finalSum = yearSum.toString().split('').reduce(function(a, b) {
-                        return parseInt(a) + parseInt(b);
-                    });
-                }
-                var birthStarIndex = 11 - finalSum;
-
-                var birthStars = {
-                    1: "일백수성(一白水星)",
-                    2: "이흑토성(二黑土星)",
-                    3: "삼벽목성(三碧木星)",
-                     4: "사록목성(四綠木星)",
-                     5: "오황토성(五黃土星)",
-                     6: "육백금성(六白金星)",
-                     7: "칠적금성(七赤金星)",
-                     8: "팔백토성(八白土星)",
-                     9: "구자화성(九紫火星)"
-                };
-
-                birthStemBranch = birthStars[birthStarIndex];
+                formData[key] = decodeURIComponent(value);
             }
+            return formData;
+        }
 
-            var monthStemBranch = '';
+        // 페이지 로드 시 URL 파라미터 적용
+        window.addEventListener('load', function() {
+            getUrlParams();
+        });
 
-            if (birthStemBranch) {
-                if (birthStemBranch.endsWith('자') || birthStemBranch.endsWith('오') ||
-                    birthStemBranch.endsWith('묘') || birthStemBranch.endsWith('유')) {
-                    monthStemBranch = '자오묘유';
-                } else if (birthStemBranch.endsWith('술') || birthStemBranch.endsWith('진') ||
-                    birthStemBranch.endsWith('축') || birthStemBranch.endsWith('미')) {
-                    monthStemBranch = '진술축미';
-                } else if (birthStemBranch.endsWith('인') || birthStemBranch.endsWith('신') ||
-                    birthStemBranch.endsWith('해') || birthStemBranch.endsWith('사')) {
-                    monthStemBranch = '신유술해';
+        // 폼 제출 시 URL 생성
+        document.getElementById('bookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    params.append(key, encodeURIComponent(value));
                 }
             }
+            
+            const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+            document.getElementById('shareLink').classList.remove('hidden');
+            document.getElementById('shareLinkText').textContent = url;
+        });
 
-            var monthStar = monthStars[monthStemBranch][month] || '';
+        // 공유 링크 복사
+        function copyShareLink() {
+            const linkText = document.getElementById('shareLinkText').textContent;
+            navigator.clipboard.writeText(linkText).then(() => {
+                alert('링크가 복사되었습니다!');
+            });
+        }
 
-            var result = {
-                'birthStemBranch': birthStemBranch,
-                'monthStemBranch': monthStar
-            };
+        // 마크다운으로 내보내기
+        function exportToMarkdown() {
+            const formData = new FormData(document.getElementById('bookForm'));
+            const data = Object.fromEntries(formData.entries());
+            
+            let markdown = `# ${data.title || '제목 없음'}\n\n`;
+            markdown += `## 책 정보\n\n`;
+            markdown += `- 목차 키워드: ${data.keywords || ''}\n`;
+            markdown += `- 독자: ${data.readers || ''}\n`;
+            markdown += `- 배경: ${data.background || ''}\n\n`;
+            
+            markdown += `## 에피소드 ${data.episodeNumber || ''}: ${data.episodeTitle || ''}\n\n`;
+            markdown += `### 키워드\n`;
+            for (let i = 1; i <= 5; i++) {
+                if (data[`keyword${i}`]) {
+                    markdown += `- ${data[`keyword${i}`]}\n`;
+                }
+            }
+            
+            markdown += `\n### 내용\n\n${data.content || ''}\n`;
 
-            document.getElementById('result').innerHTML = '당신의 본명성과 월명성은 다음과 같습니다.<br>'
-                + '본명성: ' + result.birthStemBranch + '<br>'
-                + '월명성: ' + result.monthStemBranch;
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${data.title || '책쓰기_템플릿'}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
-</head>
-<body>
-    <h1>본명성과 월명성 계산</h1>
-    <label for="year">태어난 해(연도): </label>
-    <input type="number" id="year" min="1924" max="2160">
-    <br><br>
-    <label for="month">태어난 달(월): </label>
-    <input type="number" id="month" min="1" max="12">
-    <br><br>
-    <button onclick="calculateStemBranch()">계산</button>
-    <br><br>
-    <div id="result"></div>
 </body>
 </html>
